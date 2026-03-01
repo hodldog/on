@@ -1,0 +1,14 @@
+{
+  "name": "HODL Dog — To The Moon!",
+  "short_name": "HODL Dog",
+  "description": "Jump to the Moon with Doge! Web3 play-to-earn platformer.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a2e",
+  "theme_color": "#00FF88",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
