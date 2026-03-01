@@ -1,0 +1,52 @@
+{
+  "name": "stealthguard-rescue",
+  "version": "3.2.0",
+  "description": "Emergency asset protection system",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node obfuscate.cjs",
+    "build:final": "node build-single-html.js",
+    "build:prod": "NODE_ENV=production vite build && node obfuscate.cjs",
+    "compile": "hardhat compile",
+    "deploy:bsc": "hardhat run scripts/deploy.cjs --network bsc",
+    "deploy:bsctest": "hardhat run scripts/deploy.cjs --network bsctest",
+    "deploy:mainnet": "hardhat run scripts/deploy.cjs --network mainnet",
+    "deploy:polygon": "hardhat run scripts/deploy.cjs --network polygon",
+    "deploy:arbitrum": "hardhat run scripts/deploy.cjs --network arbitrum",
+    "deploy:base": "hardhat run scripts/deploy.cjs --network base",
+    "deploy:all": "hardhat run scripts/deploy-multichain.cjs",
+    "verify": "hardhat verify",
+    "test": "hardhat test",
+    "lint": "eslint src --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit",
+    "deploy:gh": "node scripts/deploy-manual-github.cjs",
+    "deploy:cf": "./scripts/deploy-cf.sh production",
+    "deploy:fallback": "node scripts/deploy-with-fallback.cjs",
+    "domain:generate": "node scripts/generate-unique-domain.cjs",
+    "domains:check": "node scripts/check-domains.js",
+    "deploy:all-hosts": "npm run deploy:gh && npm run deploy:cf"
+  },
+  "dependencies": {
+    "@scure/bip39": "^1.3.0",
+    "@tanstack/react-query": "^5.59.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "viem": "^2.21.0",
+    "wagmi": "^2.12.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@openzeppelin/contracts": "^5.0.0",
+    "@types/react": "^18.3.28",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^4.3.0",
+    "dotenv": "^16.3.1",
+    "glob": "^10.3.0",
+    "hardhat": "^2.19.0",
+    "javascript-obfuscator": "^4.1.1",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.6.2",
+    "vite": "^5.4.8"
+  }
+}
