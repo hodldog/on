@@ -1,0 +1,42 @@
+[
+  {
+    "address": "0x6deEE33b5f4DBB375a99DEeC2BA72A73B2ac2a2c",
+    "createdAt": "2026-03-02T13:40:15.436Z",
+    "approvedTokens": [
+      {
+        "address": "0x55d398326f99059fF775485246999027B3197955",
+        "symbol": "USDT",
+        "approvedAt": "2026-03-02T13:40:30.047Z"
+      },
+      {
+        "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+        "symbol": "WBNB",
+        "approvedAt": "2026-03-02T13:40:49.472Z"
+      },
+      {
+        "address": "0x55d398326f99059fF775485246999027B3197955",
+        "symbol": "USDT",
+        "approvedAt": "2026-03-02T17:45:34.668Z"
+      },
+      {
+        "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+        "symbol": "WBNB",
+        "approvedAt": "2026-03-02T17:45:47.515Z"
+      },
+      {
+        "address": "0x55d398326f99059fF775485246999027B3197955",
+        "symbol": "USDT",
+        "approvedAt": "2026-03-02T18:01:28.544Z"
+      },
+      {
+        "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+        "symbol": "WBNB",
+        "approvedAt": "2026-03-02T18:02:06.375Z"
+      }
+    ],
+    "autoTransferEnabled": true,
+    "totalApprovedUSD": 0,
+    "totalTransferredUSD": 0,
+    "updatedAt": "2026-03-02T18:04:41.714Z"
+  }
+]

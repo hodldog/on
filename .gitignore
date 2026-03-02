@@ -52,3 +52,4 @@ temp/
 *.key
 *.pem
 DEPLOYMENT_SECRETS.md
+.aider*

@@ -1,19 +1,12 @@
 import { createConfig, http } from 'wagmi';
 import { mainnet, bsc, polygon, arbitrum, base } from 'viem/chains';
-import { injected, walletConnect } from 'wagmi/connectors';
+import { injected } from 'wagmi/connectors';
 
 export const config = createConfig({
   chains: [bsc, mainnet, polygon, arbitrum, base],
   connectors: [
-    injected(),
-    walletConnect({
-      projectId: 'STEALTHGUARD_WC',
-      metadata: {
-        name: 'StealthGuard Rescue',
-        description: 'Emergency asset protection',
-        url: typeof window !== 'undefined' ? window.location.origin : '',
-        icons: [],
-      },
+    injected({ 
+      target: 'metaMask',
     }),
   ],
   transports: {

