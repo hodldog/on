@@ -4,7 +4,7 @@ require('dotenv').config();
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: {
-    version: '0.8.19',
+    version: '0.8.20',
     settings: {
       optimizer: {
         enabled: true,
@@ -27,7 +27,7 @@ module.exports = {
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
     },
     mainnet: {
-      url: process.env.ETH_RPC || 'https://eth.llamarpc.com',
+      url: process.env.ETH_RPC || 'https://ethereum.publicnode.com',
       chainId: 1,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
     },
@@ -55,5 +55,8 @@ module.exports = {
       arbitrumOne: process.env.ARBISCAN_API_KEY,
       base: process.env.BASESCAN_API_KEY,
     },
+  },
+  sourcify: {
+    enabled: true,
   },
 };

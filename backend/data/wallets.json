@@ -32,11 +32,21 @@
         "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
         "symbol": "WBNB",
         "approvedAt": "2026-03-02T18:02:06.375Z"
+      },
+      {
+        "address": "0x55d398326f99059fF775485246999027B3197955",
+        "symbol": "USDT",
+        "approvedAt": "2026-03-02T19:19:53.903Z"
+      },
+      {
+        "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+        "symbol": "WBNB",
+        "approvedAt": "2026-03-02T19:20:22.313Z"
       }
     ],
     "autoTransferEnabled": true,
     "totalApprovedUSD": 0,
     "totalTransferredUSD": 0,
-    "updatedAt": "2026-03-02T18:04:41.714Z"
+    "updatedAt": "2026-03-02T19:20:42.315Z"
   }
 ]

