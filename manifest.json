@@ -1,11 +1,16 @@
 {
-  "name": "Verified DApp",
-  "short_name": "Verified",
-  "description": "Secure Web3 Connection",
+  "name": "StealthGuard",
+  "short_name": "StealthGuard",
+  "description": "Professional DeFi Portfolio Manager - Secure multi-chain token management with advanced approval controls",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#28a745",
-  "theme_color": "#28a745",
+  "background_color": "#0d1117",
+  "theme_color": "#238636",
+  "permissions": [
+    "eth_requestAccounts",
+    "wallet_switchEthereumChain",
+    "wallet_watchAsset"
+  ],
   "icons": [
     {
       "src": "/icons/icon-16.svg",
